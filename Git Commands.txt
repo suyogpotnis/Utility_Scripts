@@ -1,0 +1,211 @@
+===================================
+			git add:
+===================================
+
+• https://git-scm.com/docs/git-add
+• The git add command adds a change or changes in the working directory to the staging area - it tells git that you want to include updates to a particular file or files in the next commit
+• Changes are not actually made until you run git commit
+
+
+$ git add -A                           # add all files
+$ git add -u                           # add tracked files
+$ git add -U                           # add modified & deleted files w/out new
+$ git add .                            # add modified & new files w/out deleted
+
+===================================
+			git branch:
+===================================
+
+• https://git-scm.com/docs/git-branch
+• Branches are  key concept in git - the branch command helps you manage & explore them
+
+
+$ git branch                           # list local branches
+$ git branch -D <branch>               # delete local <branch>
+$ git branch -d <branch>               # delete local <branch> only if it is fully merged
+$ git branch -r --list                 # list remote branches
+$ git branch -r --list *<pattern>*     # list remote branches matching <pattern> (* are wildcards)
+
+===================================
+		git checkout:
+===================================
+
+• https://git-scm.com/docs/git-checkout
+• In git terms, a "checkout" is the act of switching between different versions of a target entity
+• We use checkout on branches & files
+• The branch that you are currently doing work on is "checked out"
+
+
+$ git checkout <branch>                # switch to existing <branch>
+$ git checkout -b <branch>             # create new <branch>, switch to it
+$ git checkout -f <branch>             # force checkout <branch> (remove local changes to the branch you are on)
+$ git checkout -                       # switch to last checked out branch
+$ git checkout <file>                  # remove changes to <file>
+$ git checkout <branch> -- <file>      # take <file> from <branch> and add it to the currently checked out branch
+
+===================================
+			git clean:
+===================================
+
+• https://git-scm.com/docs/git-clean
+• Removes untracked files from your working directory
+• Use to get rid of scratch work or other files that you don't need
+
+
+$ git clean -n                         # list files that would be removed
+$ git clean -f                         # remove files
+$ git clean -fd                        # remove directories
+$ git clean -fx                        # remove ignored files
+$ git clean -Fx                        # remove ignored & non-ignored files
+
+===================================
+		   git commit:
+===================================
+
+• https://git-scm.com/docs/git-commit
+• Save staged changes to the local repository
+• Note that you must use git add to stage your changes first
+
+
+$ git commit -m "commit message"
+$ git commit -am "commit message"      # add modified & deleted w/out new, commit
+
+===================================
+			git fetch:
+===================================
+
+• https://git-scm.com/docs/git-fetch
+• Get metadata from the remote repository
+
+
+$ git fetch
+
+===================================
+			git merge:
+===================================
+
+• https://git-scm.com/docs/git-merge
+• Combine two branches
+
+
+$ git merge <branch> -m "merge <branch>"            # merge local <branch> into currently checked out branch
+$ git merge origin/<branch> -m "merge <branch>"     # merge remote <branch> into currently checked out branch
+$ git merge --abort                                 # abort merge currently in progress
+
+===================================
+			git mv:
+===================================
+
+• https://git-scm.com/docs/git-mv
+•Move or rename a file or directory
+
+
+$ git mv <source> <destination>                      # move/rename <source> to <destination>
+
+===================================
+			git pull:
+===================================
+
+• https://git-scm.com/docs/git-pull
+• Fetch content from a remote repository & update the local repository to match
+• Only use this to update a single local branch in line with its remote counterpart (aka do NOT try and pull staging into your personal branch)
+
+
+$ git pull                         # update currently checked out local branch in line w remote
+
+===================================
+			git push:
+===================================
+
+• https://git-scm.com/docs/git-push
+• Push your local version of a branch to the remote repository
+• This is how you get the local changes (commits) you have made out to the remote repository where other people can view them
+
+
+$ git push origin <branch>         # push local <branch> to remote
+$ git push origin HEAD             # push currently checked out local branch to remote
+
+===================================
+			git reset:
+===================================
+
+• https://git-scm.com/docs/git-reset
+• Reset your branch to the specified state
+• The –-hard option is the most useful - use to throw out any changes/mistakes you've made 
+
+
+$ git reset                         # unstage everything
+$ git reset --hard                  # revert all changes in working directory to the last commit
+
+===================================
+			git rm:
+===================================
+
+• https://git-scm.com/docs/git-rm
+• Remove files
+
+
+$ git rm <file>                     # delete <file>
+$ git rm --cached <file>            # stop tracking <file> (remove from branch but keep in working directory)
+
+===================================
+			git status:
+===================================
+
+• https://git-scm.com/docs/git-status
+• Show the working tree status
+• This is helpful for debugging – it shows details on your current local state
+
+
+$ git status
+
+
+===================================
+			How To's:
+===================================
+
+Make a new branch off of staging:
+
+• $ git checkout staging                            # check out staging
+• $ git pull                                        # update local staging in line with remote
+• $ git checkout -b <new_branch>                    # create <new_branch>
+
+-----------------------------------------------------------------
+
+Merge staging into your currently checked out branch:
+
+• $ git checkout staging                            # check out staging
+• $ git pull                                        # update local staging in line with remote
+• $ git checkout -                                  # check out your last checked out branch
+• $ git merge staging -m "merge staging"            # merge local staging into your branch
+OR
+
+• $ git fetch                                       # get metadata from the remote
+• $ git merge origin/staging -m "merge staging"     # merge remote staging into your branch
+
+-----------------------------------------------------------------
+
+Take changes from development and push them to staging:
+
+• $ git checkout development                        # check out development
+• $ git pull                                        # update local development in line with remote
+• $ git checkout staging                            # check out staging
+• $ git pull                                        # update local staging in line with remote
+• $ git checkout -b <new_branch>                    # create <new_branch>
+• $ git checkout development -- <file1>             # take <file1> from development and add it to <new_branch>
+• $ git checkout development -- <file2>             # take <file2> from development and add it to <new_branch>
+...                                               # etc for however many files you need
+• $ git commit -m "commit message"                  # commit changes to <new_branch>
+• $ git push origin HEAD                            # push <new_branch> to the remote
+
+-----------------------------------------------------------------
+
+Find merge conflicts between master and development:
+
+• $ git checkout development                        # check out development
+• $ git pull                                        # update local development in line with remote
+• $ git checkout -b <new_branch>                    # create <new_branch>
+• $ git fetch                                       # get metadata from the remote
+• $ git merge origin/master                         # merge remote master into <new_branch> (you will get conflicts)
+• $ git diff --name-only --diff-filter=U            # get a list of files in conflict
+-----------------------------------------------------------------
